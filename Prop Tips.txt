@@ -1,0 +1,94 @@
+Generics
+
+-Generic is a concept that allows us to define classes and methods with placeholder or types.
+- In a stringly typed langugae like C# we cannot declare variable and later change its type
+- Ex 1: string var1 ;  
+		var1=2;
+		We cannot do this.
+
+- Ex 2: List<int> intList = new List<int>();
+		int.Add(1);
+
+- So generics helps us to pass any kind of type in method or class
+
+Example Method:  private static string FizzBuzz<T>(T item)
+                        {
+                            string output ="Oops";
+                            int itemLength = item.ToString().Length;
+           
+                            if(itemLength % 3 == 0)
+                            {
+                                output = "Fizz";
+               
+                            }
+
+                            if(itemLength %5 == 0)
+                            {
+                                output = "Buzz";
+                            }
+
+                            if (itemLength %3 ==0 && itemLength % 5 == 0)
+                            {
+                                output = "FizzBuzz";
+                            }
+
+                            return output;
+                        }
+
+                        In the above example we can pass any kind of type (bool,int,string etc)
+
+-Example Class : 
+
+        public class GenericHelper<T> where T : class, IErrorCheck
+                    {
+                        public List<T> Items { get; set; }
+
+                        public List<T>  RejectedItems { get; set; }
+        
+
+                        public void CheckItemAndAdd(T item)
+                        {
+                            if (item.hasError)
+                            {
+                                RejectedItems.Add(item);
+                            }
+                            else
+                            {
+                                Items.Add(item);
+                            }
+           
+                        }
+                    }
+
+       Note:  In the class above it has  where T : class, IErrorCheck . It means we can only add a class and which had impemented IErrorCheck Interface
+
+       public interface IErrorCheck
+                {
+                    public bool hasError { get; set; }
+                }
+
+        public class PersonModel: IErrorCheck
+                {
+                    public string FirstName { get; set; }
+
+                    public string LastName { get; set; }
+
+                    public int Age { get; set; }
+                    public bool hasError { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+                }   
+
+    public class CarModel
+                {
+                    public string  Manufacturer { get; set; }
+
+                    public int YearOfManufacture { get; set; }
+        
+                }
+
+        The PeronModel statisfy our generic class i.e it is a class and implements IErrorCheck interface
+        So we can do-  GenericHelper<PersonModel> genericHelp = new GenericHelper<PersonModel>();
+
+        Since The CarModel doesnot satisy our generic class we cannot do - GenericHelper<CarModel> genericHelp = new GenericHelper<CarModel>();
+
+
+Prop Tip: Generics helps in code reuseability. Use T to identify it is generics.
